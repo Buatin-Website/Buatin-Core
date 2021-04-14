@@ -14,14 +14,16 @@ class WebCServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $request = Http::withHeaders([
-            'referer' => request()->root(),
-        ])->post('https://admin.buatin.website/api/check', [
-            'key' => env('BUATIN_KEY'),
-        ]);
-        $response = $request->json();
-        if ($response['status'] === 500) {
-            abort(500);
+        if (config('app.env') !== 'local') {
+            $request = Http::withHeaders([
+                'referer' => request()->root(),
+            ])->post('https://admin.buatin.website/api/check', [
+                'key' => env('BUATIN_KEY'),
+            ]);
+            $response = $request->json();
+            if ($response['status'] === 500) {
+                abort(500);
+            }
         }
     }
 
