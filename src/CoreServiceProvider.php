@@ -17,6 +17,8 @@ class CoreServiceProvider extends ServiceProvider
         if (config('app.env') !== 'local') {
             $request = Http::withHeaders([
                 'referer' => request()->root(),
+            ])->withOptions([
+                'verify' => false
             ])->post('https://admin.buatin.website/api/check', [
                 'key' => env('BUATIN_KEY'),
             ]);
