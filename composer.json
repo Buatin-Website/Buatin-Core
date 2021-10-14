@@ -32,10 +32,7 @@
         "laravel": {
             "providers": [
                 "Buatin\\Core\\CoreServiceProvider"
-            ],
-            "aliases": {
-                "Core": "Buatin\\Core\\Facades\\Core"
-            }
+            ]
         }
     }
 }
