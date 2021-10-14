@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `WebC` will be documented in this file.
+All notable changes to `Buatin Core` will be documented in this file.
 
 ## Version 1.0
 

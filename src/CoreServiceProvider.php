@@ -1,11 +1,11 @@
 <?php
 
-namespace Buatin\WebC;
+namespace Buatin\Core;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
-class WebCServiceProvider extends ServiceProvider
+class CoreServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
