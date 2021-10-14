@@ -1,10 +1,10 @@
 <?php
 
-namespace Buatin\WebC\Facades;
+namespace Buatin\Core\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class WebC extends Facade
+class Core extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class WebC extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'webc';
+        return 'core';
     }
 }
