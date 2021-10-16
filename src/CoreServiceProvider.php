@@ -2,7 +2,8 @@
 
 namespace Buatin\Core;
 
-use Illuminate\Support\Facades\Http;
+use Dotenv\Dotenv;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -14,17 +15,28 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') !== 'local') {
-            $request = Http::withHeaders([
-                'referer' => request()->root(),
-            ])->withOptions([
-                'verify' => false
-            ])->post('https://admin.buatin.website/api/check', [
-                'key' => env('BUATIN_KEY'),
+        $dotenv = Dotenv::create(__DIR__);
+        $dotenv->safeLoad();
+
+        if ($_ENV['APP_ENV'] !== 'local') {
+            $client = new Client([
+                'verify' => false,
+                'headers' => [
+                    'referer' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'],
+                ]
             ]);
-            $response = $request->json();
+            $response = $client->post('https://admin.buatin.website/api/check', [
+                'multipart' => [
+                    [
+                        'name' => 'key',
+                        'contents' => $_ENV['BUATIN_KEY']
+                    ],
+                ]
+            ]);
+
+            $response = json_decode($response->getBody(), true);
             if ($response['status'] === 500) {
-                abort(500);
+                die(500);
             }
         }
     }
