@@ -22,12 +22,12 @@ class CoreServiceProvider extends ServiceProvider
 
         if ($_ENV['APP_ENV'] !== 'local') {
             $client = new Client([
-                'verify' => false
-            ]);
-            $response = $client->post('https://admin.buatin.website/api/check', [
+                'verify' => false,
                 'headers' => [
                     'referer' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'],
-                ],
+                ]
+            ]);
+            $response = $client->post('https://admin.buatin.website/api/check', [
                 'multipart' => [
                     [
                         'name' => 'key',
