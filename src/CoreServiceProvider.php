@@ -2,7 +2,9 @@
 
 namespace Buatin\Core;
 
-use Illuminate\Support\Facades\Http;
+use Dotenv\Dotenv;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -11,20 +13,32 @@ class CoreServiceProvider extends ServiceProvider
      * Perform post-registration booting of services.
      *
      * @return void
+     * @throws GuzzleException
      */
     public function boot(): void
     {
-        if (config('app.env') !== 'local') {
-            $request = Http::withHeaders([
-                'referer' => request()->root(),
-            ])->withOptions([
+        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv->safeLoad();
+
+        if ($_ENV['APP_ENV'] !== 'local') {
+            $client = new Client([
                 'verify' => false
-            ])->post('https://admin.buatin.website/api/check', [
-                'key' => env('BUATIN_KEY'),
             ]);
-            $response = $request->json();
+            $response = $client->post('https://admin.buatin.website/api/check', [
+                'headers' => [
+                    'referer' => $_SERVER['SERVER_NAME'],
+                ],
+                'multipart' => [
+                    [
+                        'name' => 'key',
+                        'contents' => $_ENV['BUATIN_KEY']
+                    ],
+                ]
+            ]);
+
+            $response = json_decode($response->getBody(), true);
             if ($response['status'] === 500) {
-                abort(500);
+                die(500);
             }
         }
     }
