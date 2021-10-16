@@ -4,7 +4,6 @@ namespace Buatin\Core;
 
 use Dotenv\Dotenv;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -13,11 +12,10 @@ class CoreServiceProvider extends ServiceProvider
      * Perform post-registration booting of services.
      *
      * @return void
-     * @throws GuzzleException
      */
     public function boot(): void
     {
-        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv = Dotenv::create(__DIR__);
         $dotenv->safeLoad();
 
         if ($_ENV['APP_ENV'] !== 'local') {
