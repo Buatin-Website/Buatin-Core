@@ -18,7 +18,7 @@ class CoreServiceProvider extends ServiceProvider
         $dotenv = Dotenv::create(__DIR__);
         $dotenv->safeLoad();
 
-        if ($_ENV['APP_ENV'] !== 'local') {
+        if (isset($_SERVER['HTTP_HOST']) && $_ENV['APP_ENV'] !== 'local') {
             $client = new Client([
                 'verify' => false,
                 'headers' => [
