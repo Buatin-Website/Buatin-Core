@@ -13,8 +13,8 @@
     "keywords": ["Buatin Core"],
     "require": {
         "illuminate/support": "~5|~6|~7|~8",
-        "guzzlehttp/guzzle": "~6",
-        "vlucas/phpdotenv": "^3.3",
+        "guzzlehttp/guzzle": "~6|~7",
+        "vlucas/phpdotenv": "~3|~4",
         "ext-json": "*"
     },
     "autoload": {
