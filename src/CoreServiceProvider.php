@@ -25,7 +25,7 @@ class CoreServiceProvider extends ServiceProvider
                     'referer' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'],
                 ]
             ]);
-            $response = $client->post('https://admin.buatin.website/api/check', [
+            $response = $client->post('https://client.buatin.website/api/check', [
                 'multipart' => [
                     [
                         'name' => 'key',
