@@ -17,7 +17,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv = Dotenv::createImmutable(base_path());
         $dotenv->safeLoad();
 
         if (isset($_SERVER['HTTP_HOST']) && $_ENV['APP_ENV'] !== 'local') {
