@@ -5,6 +5,7 @@ namespace Buatin\Core;
 use Dotenv\Dotenv;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -36,9 +37,10 @@ class CoreServiceProvider extends ServiceProvider
                         ],
                     ]
                 ]);
-                $response = json_decode($response->getBody(), true);
-                if ($response['status'] === 500) {
-                    die(500);
+            } catch (ServerException $e) {
+                $response = json_decode($e->getResponse()->getBody()->getContents(), true);
+                if ($response['error']['message'] === 'The selected key is invalid.') {
+                    abort(500);
                 }
             } catch (GuzzleException $e) {
                 // Do nothing
