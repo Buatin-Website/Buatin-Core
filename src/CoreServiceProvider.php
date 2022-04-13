@@ -21,24 +21,27 @@ class CoreServiceProvider extends ServiceProvider
         $dotenv->safeLoad();
 
         if (isset($_SERVER['HTTP_HOST']) && $_ENV['APP_ENV'] !== 'local') {
-            $client = new Client([
-                'verify' => false,
-                'headers' => [
-                    'referer' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'],
-                ]
-            ]);
-            $response = $client->post('https://client.buatin.website/api/check', [
-                'multipart' => [
-                    [
-                        'name' => 'key',
-                        'contents' => $_ENV['BUATIN_KEY']
-                    ],
-                ]
-            ]);
-
-            $response = json_decode($response->getBody(), true);
-            if ($response['status'] === 500) {
-                die(500);
+            try {
+                $client = new Client([
+                    'verify' => false,
+                    'headers' => [
+                        'referer' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'],
+                    ]
+                ]);
+                $response = $client->post('https://client.buatin.website/api/check', [
+                    'multipart' => [
+                        [
+                            'name' => 'key',
+                            'contents' => $_ENV['BUATIN_KEY']
+                        ],
+                    ]
+                ]);
+                $response = json_decode($response->getBody(), true);
+                if ($response['status'] === 500) {
+                    die(500);
+                }
+            } catch (GuzzleException $e) {
+                // Do nothing
             }
         }
     }
