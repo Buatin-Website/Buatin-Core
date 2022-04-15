@@ -39,8 +39,14 @@ class CoreServiceProvider extends ServiceProvider
                 ]);
             } catch (ServerException $e) {
                 $response = json_decode($e->getResponse()->getBody()->getContents(), true);
-                if ($response['error']['message'] === 'The selected key is invalid.') {
-                    abort(500);
+                if (!empty($response)) {
+                    if (!empty($response['error'])) {
+                        if (!empty($response['error']['message'])) {
+                            if ($response['error']['message'] === 'The selected key is invalid.') {
+                                abort(500);
+                            }
+                        }
+                    }
                 }
             } catch (GuzzleException $e) {
                 // Do nothing
